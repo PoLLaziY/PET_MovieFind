@@ -1,0 +1,25 @@
+ext {
+    rx_version = "3.0.0"
+    //RxJava3
+    rx_android = "io.reactivex.rxjava3:rxandroid:$rx_version"
+    rx_java = "io.reactivex.rxjava3:rxjava:$rx_version"
+
+    //Retrofit
+    retrofit = 'com.squareup.retrofit2:retrofit:2.9.0'
+    retrofit_gson_converter = 'com.squareup.retrofit2:converter-gson:2.6.0'
+    retrofit_rx3_adapter = "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
+
+    //Logging to Retrofit
+    retrofit_log_intercepror = 'com.squareup.okhttp3:logging-interceptor:3.12.6'
+
+    //Dagger2
+    dagger_version = "2.42"
+    dagger =  "com.google.dagger:dagger:$dagger_version"
+    dagger_kapt = "com.google.dagger:dagger-compiler:$dagger_version"
+
+    //Room
+    room_version = "2.4.3"
+    room = "androidx.room:room-runtime:$room_version"
+    room_kapt = "androidx.room:room-compiler:$room_version"
+    room_rx3_adapter = "androidx.room:room-rxjava3:$room_version"
+}

@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">PET_MovieFinder</string>
+    <!-- film_item strings -->
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fragment_animation_duration">500</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings_title">Настройки</string>
+    <string name="category_type_title">Стандартная категория фильмов</string>
+    <string name="category_popular">Популярные</string>
+    <string name="category_top">Топ</string>
+    <string name="category_soon">Скоро</string>
+    <string name="category_in_cinema">В кинотеатрах</string>
+    <string name="recycler_item_image_transition_name">image_view</string>
+    <string name="shared_button_description">SharedButton</string>
+    <string name="like_bottom_description">LikeBotto,</string>
+    <string name="bottom_bar_home_icon_text">HOME</string>
+    <string name="bottom_bar_favorite_icon_text">FAVORITE</string>
+    <string name="bottom_bar_selections_icon_text">SELECTIONS</string>
+    <string name="bottom_bar_later_icon_text">LATER</string>
+    <string name="upload">Загружено</string>
+    <string name="open">Открыть</string>
+    <string name="image_type_path">image/*</string>
+    <string name="app_bar_settings_icon_text">SETTINGS</string>
+</resources>

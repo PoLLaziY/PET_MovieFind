@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cardRadius">15dp</dimen>
+    <dimen name="cardMargin">5dp</dimen>
+    <!-- fragment_details -->
+    <dimen name="collapsing_toolbar_min_height">0dp</dimen>
+    <dimen name="app_bar_height">450dp</dimen>
+    <dimen name="description_text_size">20sp</dimen>
+    
+    <!-- textSizes -->
+    <dimen name="Head6">20sp</dimen>
+    <dimen name="Body2">14sp</dimen>
+    <dimen name="recycler_item_image_size">120dp</dimen>
+    <dimen name="rating_view_size">40dp</dimen>
+    <dimen name="description_fragment_title_margin">60dp</dimen>
+</resources>

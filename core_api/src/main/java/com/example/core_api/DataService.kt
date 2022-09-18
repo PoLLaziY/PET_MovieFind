@@ -1,0 +1,26 @@
+package com.example.core_api
+
+import com.example.domain.Film
+import com.example.domain.FilmsCategory
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+
+interface DataService {
+    fun getAllFilms(): Observable<List<Film>>
+
+    fun getFavoriteFilms(): Observable<List<Film>>
+
+    fun insertFilms(films: List<Film>)
+
+    fun deleteFilm(film: Film)
+
+    fun clearAllFilms()
+
+    fun clearNotFavoriteFilms()
+
+    fun getFilmsCategory(): Single<FilmsCategory>
+
+    fun saveFilmsCategory(category: FilmsCategory): Single<FilmsCategory>
+
+    fun insertFilm(film: Film)
+}

@@ -34,8 +34,6 @@ class FilmListFragment(repository: FilmsRepository, navigation: Navigation) : Fr
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     adapter.list = it
-                    Log.i("VVV", "Fragment get ${it.size} in ${Thread.currentThread()}")
-                    Log.i("ThreadCheck", "Main ${Thread.currentThread()}")
                 },
 
             viewModel.isRefreshing
@@ -107,9 +105,8 @@ class FilmListFragment(repository: FilmsRepository, navigation: Navigation) : Fr
         return binding.root
     }
 
-    override fun onStop() {
-        disposableHandler.dispose()
-        Log.i("Home", "OnStop")
-        super.onStop()
+    override fun onPause() {
+        super.onPause()
+        disposableHandler.clear()
     }
 }

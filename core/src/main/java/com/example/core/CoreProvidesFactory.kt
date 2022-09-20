@@ -1,12 +1,12 @@
 package com.example.core
 
-import com.example.core_api.ContextProvider
+import android.content.Context
 import com.example.core_api.CoreComponent
 import com.example.core_impl.DaggerCoreComponentImpl
 
 object CoreProvidesFactory {
 
-    fun provideCoreComponent(contextProvider: ContextProvider): CoreComponent {
-        return DaggerCoreComponentImpl.builder().contextProvider(contextProvider).build()
+    fun provideCoreComponent(context: Context): CoreComponent {
+        return DaggerCoreComponentImpl.factory().create(context)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.pet_moviefinder.repository
 
+import android.util.Log
 import com.example.core_api.DataService
 import com.example.domain.Film
 import io.reactivex.rxjava3.disposables.Disposable
@@ -9,13 +10,17 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 class FavoriteFilmsRepositoryImpl(
     dataService: DataService
 ) : FilmsRepository {
+
     override val allFilmsList: BehaviorSubject<List<Film>> = BehaviorSubject.create()
     override val searchedFilmsList: BehaviorSubject<List<Film>> = BehaviorSubject.createDefault(
         emptyList()
     )
+
     override val loading: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(true)
 
-    private val _dataFilms = dataService.getFavoriteFilms().buffer(1).map { it[0] }
+    private val _dataFilms = dataService.getFavoriteFilms().buffer(1).map {
+        Log.i("SSS", "_dataFilms get Films")
+        it[0] }
     private var searchProcess: Disposable? = null
         set(value) {
             field = value
@@ -49,6 +54,7 @@ class FavoriteFilmsRepositoryImpl(
         loadProcess?.dispose()
         loadProcess = _dataFilms.subscribeOn(Schedulers.io())
             .subscribe {
+                Log.i("SSS", "_dataFilms send to allFilms ${it.size}")
                 allFilmsList.onNext(it)
                 loadProcess = null
             }

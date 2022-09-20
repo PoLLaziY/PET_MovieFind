@@ -9,22 +9,20 @@ import com.example.domain.FilmsCategory
 import com.example.pet_moviefinder.databinding.FragmentSettingsBinding
 import com.example.pet_moviefinder.view_model.SettingsFragmentModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class SettingsFragment(private val viewModel: SettingsFragmentModel) : Fragment() {
 
     lateinit var binding: FragmentSettingsBinding
+    private val disposableHandler: CompositeDisposable by lazy {
+        CompositeDisposable()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.radioGroup.setOnCheckedChangeListener { _, i ->
             viewModel.onCategoryTypeChanged(i)
-        }
-
-        viewModel.categoryType
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-            checkTypeRadio(it)
         }
 
         //настройка нижнего окна навигации
@@ -41,6 +39,23 @@ class SettingsFragment(private val viewModel: SettingsFragmentModel) : Fragment(
             else -> binding.popular
         }
         button.isChecked = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        disposableHandler.addAll(
+            viewModel.categoryType
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    checkTypeRadio(it)
+                }
+        )
+    }
+
+    override fun onPause() {
+        disposableHandler.clear()
+        super.onPause()
     }
 
     override fun onCreateView(

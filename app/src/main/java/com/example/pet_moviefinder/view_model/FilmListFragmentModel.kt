@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.domain.Film
 import com.example.pet_moviefinder.Navigation
+import com.example.pet_moviefinder.repository.FavoriteFilmsRepositoryImpl
 import com.example.pet_moviefinder.repository.FilmsRepository
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -16,26 +17,14 @@ class FilmListFragmentModel(
     private val navigation: Navigation
 ) : ViewModel() {
 
-
-    //Out
-    val filmList: BehaviorSubject<List<Film>> = BehaviorSubject.create()
-    val isRefreshing: Observable<Boolean> =
-        repository.loading.debounce(100, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.io())
-
-    private var filmsSubscribe: Disposable? = null
-
-    fun onNavigationClickListener(itemId: Int): Boolean {
-        return navigation.onNavigationClick(itemId)
-    }
-
-    fun onFilmItemClick(film: Film): Boolean {
-        return navigation.onFilmItemClick(film)
-    }
-
     //In
     val queryFromSearch: BehaviorSubject<String> = BehaviorSubject.createDefault("")
 
+    //Out
+    val filmList: BehaviorSubject<List<Film>> = BehaviorSubject.create()
+    val isRefreshing: Observable<Boolean> = repository.loading.subscribeOn(Schedulers.io())
+
+    private var outFilmListSubscribe: Disposable? = null
     //Private
     private var isSearch = false
     private var activePage = 1
@@ -45,7 +34,6 @@ class FilmListFragmentModel(
         listPosition > (filmList.value?.size ?: 0) - 10
 
     fun listPositionIs(it: Int) {
-        Log.i("VVV", "pos $it, lis size ${filmList.value?.size ?: 0}, needUpload ${needUpload(it)}")
         if (!needUpload(it)) return
         if (!isSearch) {
             if (repository.getNextFilmsPage(activePage + 1)) {
@@ -93,18 +81,28 @@ class FilmListFragmentModel(
     }
 
     private fun showSearchFilms() {
-        filmsSubscribe?.dispose()
-        filmsSubscribe = repository.searchedFilmsList.subscribeOn(Schedulers.io())
+        outFilmListSubscribe?.dispose()
+        outFilmListSubscribe = repository.searchedFilmsList.subscribeOn(Schedulers.io())
             .subscribe {
                 filmList.onNext(it)
             }
     }
 
     private fun showAllFilms() {
-        filmsSubscribe?.dispose()
-        filmsSubscribe = repository.allFilmsList.subscribeOn(Schedulers.io())
+        outFilmListSubscribe?.dispose()
+        outFilmListSubscribe = repository.allFilmsList.subscribeOn(Schedulers.io())
             .subscribe {
+                if (repository is FavoriteFilmsRepositoryImpl) Log.i("SSS", "All Films send ${it.size} to FilmList")
                 filmList.onNext(it)
             }
+    }
+
+
+    fun onNavigationClickListener(itemId: Int): Boolean {
+        return navigation.onNavigationClick(itemId)
+    }
+
+    fun onFilmItemClick(film: Film): Boolean {
+        return navigation.onFilmItemClick(film)
     }
 }

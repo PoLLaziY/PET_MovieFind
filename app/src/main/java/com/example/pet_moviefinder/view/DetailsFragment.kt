@@ -15,6 +15,7 @@ import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.R
 import com.example.pet_moviefinder.databinding.FragmentDetailsBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class DetailsFragment(film: Film, dataService: DataService, navigation: Navigation) : Fragment() {
@@ -22,6 +23,10 @@ class DetailsFragment(film: Film, dataService: DataService, navigation: Navigati
     lateinit var binding: FragmentDetailsBinding
     private val viewModel: DetailsFragmentModel by lazy {
         DetailsFragmentModel(film, dataService, navigation)
+    }
+
+    private val disposableHandler: CompositeDisposable by lazy {
+        CompositeDisposable()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,14 +38,6 @@ class DetailsFragment(film: Film, dataService: DataService, navigation: Navigati
             .load(ConstForRestAPI.IMAGES_URL + "w500" + viewModel.film.iconUrl)
             .centerCrop()
             .into(binding.detailsPoster)
-
-        viewModel.isFavoriteInRepository.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                Log.i("VVV", "$it In Subscribe")
-                if (it) binding.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_24)
-                else binding.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-            }
 
         //слушатели для кнопок
         binding.favoriteFab.setOnClickListener {
@@ -56,10 +53,29 @@ class DetailsFragment(film: Film, dataService: DataService, navigation: Navigati
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        disposableHandler.addAll(
+            viewModel.isFavoriteInRepository.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    Log.i("VVV", "$it In Subscribe")
+                    if (it) binding.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_24)
+                    else binding.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                }
+        )
+    }
+
+    override fun onPause() {
+        disposableHandler.clear()
+        super.onPause()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }

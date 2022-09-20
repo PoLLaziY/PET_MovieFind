@@ -1,6 +1,8 @@
 package com.example.pet_moviefinder
 
 import android.app.Application
+import com.example.pet_moviefinder.di.AppComponent
+import com.example.pet_moviefinder.di.DaggerAppComponent
 
 class App: Application() {
 

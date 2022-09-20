@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "com.example.pet_moviefinder"
         minSdk 21
-        targetSdk 32
+        targetSdk 23
         versionCode 1
         versionName "1.0"
 

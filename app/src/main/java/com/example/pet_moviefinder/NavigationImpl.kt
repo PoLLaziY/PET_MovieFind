@@ -18,9 +18,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.domain.ConstForRestAPI
 import com.example.domain.Film
-import com.example.pet_moviefinder.view.DetailsFragment
-import com.example.pet_moviefinder.view.FilmListFragment
-import com.example.pet_moviefinder.view.SettingsFragment
+import com.example.pet_moviefinder.view.*
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -84,8 +82,8 @@ class NavigationImpl() : Navigation {
             when (itemId) {
                 R.id.home -> homeFragment
                 R.id.favorite -> favoriteFragment
-                // R.id.later -> setFragment(LaterFragment(), R.id.later.toString())
-                //R.id.selections -> setFragment(SelectionsFragment(), R.id.selections.toString())
+                R.id.later -> LaterFragment()
+                R.id.selections -> SelectionsFragment()
                 R.id.settings -> settingsFragment
                 else -> null
             }

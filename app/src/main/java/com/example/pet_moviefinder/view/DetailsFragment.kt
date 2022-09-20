@@ -10,8 +10,8 @@ import com.bumptech.glide.Glide
 import com.example.core_api.DataService
 import com.example.domain.ConstForRestAPI
 import com.example.domain.Film
-import com.example.pet_moviefinder.view_model.DetailsFragmentModel
 import com.example.pet_moviefinder.Navigation
+import com.example.pet_moviefinder.view_model.DetailsFragmentModel
 import com.example.pet_moviefinder.R
 import com.example.pet_moviefinder.databinding.FragmentDetailsBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -31,7 +31,6 @@ class DetailsFragment(film: Film, dataService: DataService, navigation: Navigati
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.detailsTitle.text = viewModel.film.title
         binding.detailsDescription.text = viewModel.film.description
         Glide.with(binding.root.context)

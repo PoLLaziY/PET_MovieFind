@@ -171,12 +171,12 @@ class FilmsRepositoryImpl(
 
     }
 
-    private fun getFilmsFromWeb(page: Int): Single<List<Film>> =
+    private fun getFilmsFromWeb(page: Int): Single<out List<Film>> =
         webService.getFilms(page, category.value!!, Language.RUS).subscribeOn(Schedulers.io())
 
-    private fun searchFilmsFromWeb(query: String, page: Int): Single<List<Film>> =
+    private fun searchFilmsFromWeb(query: String, page: Int): Single<out List<Film>> =
         webService.searchFilms(query, page, Language.RUS).subscribeOn(Schedulers.io())
 
-    private fun loadFilmsFromData(): Single<List<Film>> =
+    private fun loadFilmsFromData(): Single<out List<Film>> =
         dataService.getAllFilms().singleOrError().subscribeOn(Schedulers.io())
 }

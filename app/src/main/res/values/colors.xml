@@ -19,4 +19,6 @@
     <color name="button_color">@color/white</color>
     <color name="text_color">@color/white</color>
     <color name="grey">#888483</color>
+    <color name="red">#EE1C0D</color>
+    <color name="green">#5DEC20</color>
 </resources>

@@ -3,6 +3,8 @@ package com.example.pet_moviefinder.view_model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.domain.Film
+import com.example.domain.NetworkState
+import com.example.domain.WebResourceState
 import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.repository.FavoriteFilmsRepositoryImpl
 import com.example.pet_moviefinder.repository.FilmsRepository
@@ -14,7 +16,7 @@ import java.util.concurrent.TimeUnit
 
 class FilmListFragmentModel(
     private val repository: FilmsRepository,
-    private val navigation: Navigation
+    private val navigation: Navigation,
 ) : ViewModel() {
 
     //In
@@ -23,9 +25,11 @@ class FilmListFragmentModel(
     //Out
     val filmList: BehaviorSubject<List<Film>> = BehaviorSubject.create()
     val isRefreshing: Observable<Boolean> = repository.loading.subscribeOn(Schedulers.io())
+    val networkState: Observable<NetworkState> = navigation.networkState.subscribeOn(Schedulers.io())
+    val webResState: Observable<WebResourceState> = navigation.webResourceState.subscribeOn(Schedulers.io())
 
-    private var outFilmListSubscribe: Disposable? = null
     //Private
+    private var outFilmListSubscribe: Disposable? = null
     private var isSearch = false
     private var activePage = 1
     private var activePageSearch = 1

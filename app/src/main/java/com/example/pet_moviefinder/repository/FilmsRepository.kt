@@ -2,6 +2,8 @@ package com.example.pet_moviefinder.repository
 
 import com.example.domain.Film
 import com.example.domain.FilmsCategory
+import com.example.domain.NetworkState
+import com.example.domain.WebResourceState
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
@@ -19,5 +21,10 @@ interface FilmsRepository {
 interface SettingsRepository {
     val filmsCategory: BehaviorSubject<FilmsCategory>
     fun saveFilmsCategory(filmsCategory: FilmsCategory)
+}
+
+interface NavigationRepository {
+    val networkState: Observable<NetworkState>
+    val webResourceState: Observable<WebResourceState>
 }
 

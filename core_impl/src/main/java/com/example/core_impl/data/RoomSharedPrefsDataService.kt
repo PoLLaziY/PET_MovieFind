@@ -14,17 +14,12 @@ class RoomSharedPrefsDataService(
     private val sharedPrefs: SharedPreferencesHelper
 ) : DataService {
 
-    override fun getAllFilms(): Observable<List<Film>> {
-        return roomDao.getAllFilms().map {
-            it
-        }
+    override fun getAllFilms(): Observable<out List<Film>> {
+        return roomDao.getAllFilms()
     }
 
-    override fun getFavoriteFilms(): Observable<List<Film>> {
-        return roomDao.getFavoriteFilms().map {
-            Log.i("SSS", "DbIsChanged")
-            it
-        }
+    override fun getFavoriteFilms(): Observable<out List<Film>> {
+        return roomDao.getFavoriteFilms()
     }
 
     override fun insertFilms(films: List<Film>) {

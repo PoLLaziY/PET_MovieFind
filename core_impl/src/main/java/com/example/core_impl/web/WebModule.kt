@@ -1,5 +1,7 @@
 package com.example.core_impl.web
 
+import android.content.Context
+import com.example.core_api.NetworkStateListener
 import com.example.core_api.WebService
 import com.example.core_impl.web.retrofit.RetrofitAPI
 import com.example.domain.ConstForRestAPI
@@ -15,6 +17,11 @@ import javax.inject.Singleton
 
 @Module
 class WebModule {
+
+    @Provides
+    @Singleton
+    fun provideNetworkStateListener(context: Context): NetworkStateListener =
+        NetworkStateListenerImpl(context)
 
     @Provides
     @Singleton

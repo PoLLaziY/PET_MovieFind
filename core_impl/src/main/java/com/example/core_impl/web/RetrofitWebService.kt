@@ -2,27 +2,35 @@ package com.example.core_impl.web
 
 import com.example.core_api.WebService
 import com.example.core_impl.web.retrofit.RetrofitAPI
-import com.example.domain.ConstForRestAPI
-import com.example.domain.Film
-import com.example.domain.FilmsCategory
-import com.example.domain.Language
+import com.example.domain.*
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class RetrofitWebService(private val retrofitService: RetrofitAPI) :
     WebService {
+
+    private val webResourceState: BehaviorSubject<WebResourceState> =
+        BehaviorSubject.createDefault(WebResourceState.CONNECT)
+
+    override fun getWebResourceState(): Observable<WebResourceState> {
+        return webResourceState.distinctUntilChanged()
+    }
 
     override fun getFilms(
         page: Int,
         category: FilmsCategory,
         language: Language
-    ): Single<List<Film>> {
+    ): Single<out List<Film>> {
         return retrofitService.getFilmsFromAPI(
             page = page,
             category = category.key,
             language = language.key,
             apiKey = ConstForRestAPI.KEY
-        )
-            .map {
+        ).doOnError {
+            webResourceState.onNext(WebResourceState.DISCONNECT)
+        }.map {
+            webResourceState.onNext(WebResourceState.CONNECT)
             it.results
         }
     }
@@ -31,15 +39,18 @@ class RetrofitWebService(private val retrofitService: RetrofitAPI) :
         query: String,
         page: Int,
         language: Language
-    ): Single<List<Film>> {
+    ): Single<out List<Film>> {
         return retrofitService.searchFilmsFromAPI(
             query = query,
             page = page,
             language = language.key,
             apiKey = ConstForRestAPI.KEY
-        )
-            .map {
-            it.results }
+        ).doOnError {
+            webResourceState.onNext(WebResourceState.DISCONNECT)
+        }.map {
+            webResourceState.onNext(WebResourceState.CONNECT)
+            it.results
+        }
     }
 
 }

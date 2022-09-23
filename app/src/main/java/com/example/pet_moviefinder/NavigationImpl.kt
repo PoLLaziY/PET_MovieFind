@@ -18,16 +18,19 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.domain.ConstForRestAPI
 import com.example.domain.Film
+import com.example.domain.NetworkState
+import com.example.domain.WebResourceState
+import com.example.pet_moviefinder.repository.NavigationRepository
 import com.example.pet_moviefinder.view.*
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.NullPointerException
 import java.net.URL
 
-
-class NavigationImpl() : Navigation {
+class NavigationImpl(private val navigationRepository: NavigationRepository) : Navigation {
     private var activity: MainActivity? = null
         set(value) {
             field = value
@@ -130,6 +133,9 @@ class NavigationImpl() : Navigation {
             activity!!.startActivity(Intent.createChooser(intent, "Share To:"))
         }
     }
+
+    override val networkState: Observable<NetworkState> = navigationRepository.networkState
+    override val webResourceState: Observable<WebResourceState> = navigationRepository.webResourceState
 
     private fun checkPermissions(): Boolean {
         if (activity != null) {

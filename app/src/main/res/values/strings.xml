@@ -38,4 +38,6 @@
     <string name="open">Открыть</string>
     <string name="image_type_path">image/*</string>
     <string name="app_bar_settings_icon_text">SETTINGS</string>
+    <string name="web_service_state">WebServiceState</string>
+    <string name="network_state">NetworkState</string>
 </resources>

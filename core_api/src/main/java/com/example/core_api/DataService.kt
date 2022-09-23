@@ -6,9 +6,9 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 
 interface DataService {
-    fun getAllFilms(): Observable<List<Film>>
+    fun getAllFilms(): Observable<out List<Film>>
 
-    fun getFavoriteFilms(): Observable<List<Film>>
+    fun getFavoriteFilms(): Observable<out List<Film>>
 
     fun insertFilms(films: List<Film>)
 

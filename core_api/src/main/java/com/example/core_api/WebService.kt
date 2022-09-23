@@ -5,7 +5,7 @@ import com.example.domain.FilmsCategory
 import com.example.domain.Language
 import io.reactivex.rxjava3.core.Single
 
-interface WebService {
-    fun getFilms(page: Int, category: FilmsCategory, language: Language): Single<List<Film>>
-    fun searchFilms(query: String, page: Int, language: Language): Single<List<Film>>
+interface WebService: WebResourceStateListener {
+    fun getFilms(page: Int, category: FilmsCategory, language: Language): Single<out List<Film>>
+    fun searchFilms(query: String, page: Int, language: Language): Single<out List<Film>>
 }

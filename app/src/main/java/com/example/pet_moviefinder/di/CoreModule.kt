@@ -2,9 +2,7 @@ package com.example.pet_moviefinder.di
 
 import android.content.Context
 import com.example.core.CoreProvidesFactory
-import com.example.core_api.CoreComponent
-import com.example.core_api.DataService
-import com.example.core_api.WebService
+import com.example.core_api.*
 import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.NavigationImpl
 import com.example.pet_moviefinder.repository.*
@@ -15,11 +13,29 @@ import javax.inject.Singleton
 
 @Module
 class CoreModule {
+    @Provides
+    @Singleton
+    fun provideWebResStateListener(webService: WebService): WebResourceStateListener = webService
 
     @Provides
     @Singleton
-    fun provideNavigation(): Navigation =
-        NavigationImpl()
+    fun provideNetworkStateListener(coreComponent: CoreComponent): NetworkStateListener =
+        coreComponent.provideNetworkStateListener()
+
+    @Provides
+    @Singleton
+    fun provideNavigation(navigationRepository: NavigationRepository): Navigation =
+        NavigationImpl(navigationRepository)
+
+
+    @Provides
+    @Singleton
+    fun provideNavigationRepository(
+        networkStateListener: NetworkStateListener,
+        webResourceStateListener: WebResourceStateListener
+    ): NavigationRepository =
+        NavigationRepositoryImpl(networkStateListener, webResourceStateListener)
+
 
     @Provides
     @Singleton

@@ -1,14 +1,16 @@
 package com.example.pet_moviefinder.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import com.example.domain.NetworkState
+import com.example.domain.WebResourceState
 import com.example.pet_moviefinder.view_model.FilmListFragmentModel
 import com.example.pet_moviefinder.Navigation
+import com.example.pet_moviefinder.R
 import com.example.pet_moviefinder.repository.FilmsRepository
 import com.example.pet_moviefinder.databinding.FragmentFilmListBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -24,7 +26,7 @@ class FilmListFragment(repository: FilmsRepository, navigation: Navigation) : Fr
 
     private val adapter: FilmListAdapter by lazy {
         FilmListAdapter(filmItemClickListener = { viewModel.onFilmItemClick(it) },
-            requestPositionListener = { viewModel.listPositionIs(it)})
+            requestPositionListener = { viewModel.listPositionIs(it) })
     }
 
     override fun onResume() {
@@ -40,6 +42,26 @@ class FilmListFragment(repository: FilmsRepository, navigation: Navigation) : Fr
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe() {
                     binding.contentView.swipeRefreshLayout.isRefreshing = it
+                },
+
+            viewModel.networkState
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    binding.appBar.networkState
+                        .setImageResource(
+                            if (it == NetworkState.CONNECT) R.drawable.ic_baseline_signal_cellular_4_bar_24
+                            else R.drawable.ic_baseline_signal_cellular_0_bar_24
+                        )
+                },
+
+            viewModel.webResState
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    binding.appBar.webResState
+                        .setImageResource(
+                            if (it == WebResourceState.CONNECT) R.drawable.ic_baseline_cloud_queue_24
+                            else R.drawable.ic_baseline_cloud_off_24
+                        )
                 }
         )
     }
@@ -85,7 +107,7 @@ class FilmListFragment(repository: FilmsRepository, navigation: Navigation) : Fr
             override fun onQueryTextSubmit(query: String?) = true
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.queryFromSearch.onNext(newText?: "")
+                viewModel.queryFromSearch.onNext(newText ?: "")
                 return true
             }
         })

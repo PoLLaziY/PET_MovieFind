@@ -16,9 +16,8 @@ import com.example.pet_moviefinder.databinding.FragmentFilmListBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
-class FilmListFragment(repository: FilmsRepository, navigation: Navigation) : Fragment() {
+class FilmListFragment(private val viewModel: FilmListFragmentModel) : Fragment() {
 
-    private val viewModel: FilmListFragmentModel = FilmListFragmentModel(repository, navigation)
     private lateinit var binding: FragmentFilmListBinding
     private val disposableHandler: CompositeDisposable by lazy {
         CompositeDisposable()
@@ -68,6 +67,16 @@ class FilmListFragment(repository: FilmsRepository, navigation: Navigation) : Fr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.appBar.networkState.setImageResource(
+            if (viewModel.lastNetworkState == NetworkState.CONNECT) R.drawable.ic_baseline_signal_cellular_4_bar_24
+            else R.drawable.ic_baseline_signal_cellular_0_bar_24
+        )
+
+        binding.appBar.webResState.setImageResource(
+            if (viewModel.lastWebResourceState == WebResourceState.CONNECT) R.drawable.ic_baseline_cloud_queue_24
+            else R.drawable.ic_baseline_cloud_off_24
+        )
 
         //настройка RecyclerView
         binding.contentView.rv.adapter = adapter

@@ -6,7 +6,6 @@ import com.example.core_api.*
 import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.NavigationImpl
 import com.example.pet_moviefinder.repository.*
-import com.example.pet_moviefinder.view_model.SettingsFragmentModel
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -57,13 +56,6 @@ class CoreModule {
     fun provideSettingsRepository(dataService: DataService): SettingsRepository =
         SettingsRepositoryImpl(dataService)
 
-    @Provides
-    @Singleton
-    fun provideSettingsFragmentModel(
-        settingsRepository: SettingsRepository,
-        navigation: Navigation
-    ): SettingsFragmentModel =
-        SettingsFragmentModel(settingsRepository, navigation)
 
     @Provides
     @Singleton

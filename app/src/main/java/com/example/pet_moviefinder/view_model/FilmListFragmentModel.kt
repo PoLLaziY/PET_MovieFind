@@ -17,16 +17,30 @@ import java.util.concurrent.TimeUnit
 class FilmListFragmentModel(
     private val repository: FilmsRepository,
     private val navigation: Navigation,
-) : ViewModel() {
+) : ViewModel(), FavoriteListModel {
 
     //In
     val queryFromSearch: BehaviorSubject<String> = BehaviorSubject.createDefault("")
 
     //Out
+    var lastNetworkState: NetworkState = NetworkState.CONNECT
+        private set
+
+    var lastWebResourceState: WebResourceState = WebResourceState.CONNECT
+        private set
+
     val filmList: BehaviorSubject<List<Film>> = BehaviorSubject.create()
     val isRefreshing: Observable<Boolean> = repository.loading.subscribeOn(Schedulers.io())
-    val networkState: Observable<NetworkState> = navigation.networkState.subscribeOn(Schedulers.io())
-    val webResState: Observable<WebResourceState> = navigation.webResourceState.subscribeOn(Schedulers.io())
+    val networkState: Observable<NetworkState> =
+        navigation.networkState.subscribeOn(Schedulers.io()).apply {
+            observeOn(Schedulers.io())
+                .subscribe { lastNetworkState = it }
+        }
+    val webResState: Observable<WebResourceState> =
+        navigation.webResourceState.subscribeOn(Schedulers.io()).apply {
+            observeOn(Schedulers.io())
+                .subscribe { lastWebResourceState = it }
+        }
 
     //Private
     private var outFilmListSubscribe: Disposable? = null
@@ -96,7 +110,10 @@ class FilmListFragmentModel(
         outFilmListSubscribe?.dispose()
         outFilmListSubscribe = repository.allFilmsList.subscribeOn(Schedulers.io())
             .subscribe {
-                if (repository is FavoriteFilmsRepositoryImpl) Log.i("SSS", "All Films send ${it.size} to FilmList")
+                if (repository is FavoriteFilmsRepositoryImpl) Log.i(
+                    "SSS",
+                    "All Films send ${it.size} to FilmList"
+                )
                 filmList.onNext(it)
             }
     }

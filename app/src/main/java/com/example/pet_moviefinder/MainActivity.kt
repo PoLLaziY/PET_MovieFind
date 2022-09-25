@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val nav = App.app.appComponent.provideNavigation
+        val nav = App.app.appComponent.provideNavigation()
         nav.subscribe(this)
     }
 }

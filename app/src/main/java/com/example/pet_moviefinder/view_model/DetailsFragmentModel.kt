@@ -11,40 +11,43 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class DetailsFragmentModel(
-    val film: Film,
     private val data: DataService,
     private val navigation: Navigation
 ) : ViewModel() {
 
-    val isFavoriteInRepository: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(film.isFavorite)
+    var film: Film? = null
+        set(value) {
+            field = value
+            if (film == null) return
+            isFavoriteInRepository.onNext(film!!.isFavorite)
+            data.getFavoriteFilms().buffer(1)
+                .map { list ->
+                    val ist = list[0].any { it.id == film!!.id }
+                    Log.i("VVV", "${film!!.id} $ist")
+                    ist}
+                .subscribeOn(Schedulers.io())
+                .subscribe {
+                    isFavoriteInRepository.onNext(it)
+                }
+        }
+
+    val isFavoriteInRepository: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
     var changingFavoriteState: Disposable? = null
 
-    init {
-        data.getFavoriteFilms().buffer(1)
-            .map { list ->
-                val ist = list[0].any { it.id == film.id }
-               Log.i("VVV", "${film.id} $ist")
-            ist}
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                isFavoriteInRepository.onNext(it)
-            }
-    }
-
     fun onShareButtonClick() {
-        navigation.onShareButtonClick(film)
+        film?.let { navigation.onShareButtonClick(it) }
     }
 
     fun onDownloadImageClick() {
-        navigation.onDownloadImageClick(film)
+        film?.let { navigation.onDownloadImageClick(it) }
     }
 
     fun changeFavoriteState() {
         if (changingFavoriteState != null) return
 
         changingFavoriteState = Completable.create {
-            film.isFavorite = isFavoriteInRepository.value == false
-            data.insertFilm(film)
+            film?.isFavorite = isFavoriteInRepository.value == false
+            film?.let { it1 -> data.insertFilm(it1) }
             it.onComplete()
         }.subscribeOn(Schedulers.io())
             .subscribe {

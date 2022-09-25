@@ -22,6 +22,7 @@ import com.example.domain.NetworkState
 import com.example.domain.WebResourceState
 import com.example.pet_moviefinder.repository.NavigationRepository
 import com.example.pet_moviefinder.view.*
+import com.example.pet_moviefinder.view_model.FilmListFragmentModel
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
@@ -49,21 +50,19 @@ class NavigationImpl(private val navigationRepository: NavigationRepository) : N
 
     private val homeFragment: FilmListFragment by lazy {
         FilmListFragment(
-            App.app.appComponent.provideFilmRepository,
-            this
+            App.app.appComponent.provideFilmsModel()
         )
     }
 
     private val favoriteFragment: FilmListFragment by lazy {
         FilmListFragment(
-            App.app.appComponent.provideFavoriteFilmsRepository,
-            this
+            App.app.appComponent.provideFavoriteFilmsModel() as FilmListFragmentModel
         )
     }
 
     private val settingsFragment: SettingsFragment by lazy {
         SettingsFragment(
-            App.app.appComponent.provideSettingsFragmentModel
+            App.app.appComponent.provideSettingsModel()
         )
     }
 
@@ -111,7 +110,7 @@ class NavigationImpl(private val navigationRepository: NavigationRepository) : N
         if (fragmentManager != null) fragmentManager!!.beginTransaction()
             .add(
                 R.id.fragment_root,
-                DetailsFragment(film, App.app.appComponent.provideDataService, this)
+                DetailsFragment(App.app.appComponent.provideDetails(film))
             ).addToBackStack(null).commit()
         return true
     }

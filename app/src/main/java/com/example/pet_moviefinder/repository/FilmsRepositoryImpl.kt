@@ -51,9 +51,6 @@ class FilmsRepositoryImpl(
             }
         }
 
-
-    private var category: BehaviorSubject<FilmsCategory> = settingsRepository.filmsCategory
-
     override fun getNextFilmsPage(page: Int): Boolean {
         val iCan = canGetNextFilmsPage()
         if (!iCan) {
@@ -172,7 +169,7 @@ class FilmsRepositoryImpl(
     }
 
     private fun getFilmsFromWeb(page: Int): Single<out List<Film>> =
-        webService.getFilms(page, category.value!!, Language.RUS).subscribeOn(Schedulers.io())
+        webService.getFilms(page, settingsRepository.filmsCategory.value?: FilmsCategory.POPULAR, Language.RUS).subscribeOn(Schedulers.io())
 
     private fun searchFilmsFromWeb(query: String, page: Int): Single<out List<Film>> =
         webService.searchFilms(query, page, Language.RUS).subscribeOn(Schedulers.io())

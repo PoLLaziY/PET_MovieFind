@@ -6,4 +6,5 @@ object ConstForRestAPI {
     const val IMAGES_URL = "https://image.tmdb.org/t/p/"
     const val LANGUAGE_RU = "ru-RU"
     const val KEY = "caf7c4132909b55d9aae0c6808fee3d3"
+
 }

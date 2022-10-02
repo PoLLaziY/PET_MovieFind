@@ -10,22 +10,24 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.core_api.NetworkStateListener
 import com.example.domain.NetworkState
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class NetworkStateListenerImpl(private val context: Context) : NetworkStateListener {
 
-    val networkState: BehaviorSubject<NetworkState> =
-        BehaviorSubject.createDefault(NetworkState.DISCONNECT)
-    var isRegister = false
+    override val networkState: BehaviorSubject<NetworkState>
+        get() {
+            if (!isRegister) registerNetworkListener(context)
+            return _networkState
+        }
 
-    override fun getNetworkState(): Observable<NetworkState> {
-        if (!isRegister) registerNetworkListener()
-        return networkState.distinctUntilChanged()
+    private val _networkState: BehaviorSubject<NetworkState> by lazy {
+        BehaviorSubject.createDefault(NetworkState.DISCONNECT)
     }
 
-    private fun registerNetworkListener() {
+    var isRegister = false
+
+    private fun registerNetworkListener(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             registerNetworkCallBack(context)
         } else {
@@ -57,14 +59,16 @@ class NetworkStateListenerImpl(private val context: Context) : NetworkStateListe
 
     private fun registerReceiver(context: Context) {
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        context.registerReceiver(NetworkBroadcastReceiver(networkState), filter)
+        context.registerReceiver(NetworkBroadcastReceiver(_networkState), filter)
+        isRegister = true
     }
 }
 
 class NetworkBroadcastReceiver(private val observer: Observer<NetworkState>) : BroadcastReceiver() {
     override fun onReceive(p0: Context?, intent: Intent?) {
         if (intent?.action != ConnectivityManager.CONNECTIVITY_ACTION) return
-        val noConnectivity = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+        val noConnectivity =
+            intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
         observer.onNext(
             if (noConnectivity) NetworkState.DISCONNECT else NetworkState.CONNECT
         )

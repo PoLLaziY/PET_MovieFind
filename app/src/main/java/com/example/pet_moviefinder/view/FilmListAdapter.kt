@@ -3,14 +3,16 @@ package com.example.pet_moviefinder.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.domain.ConstForRestAPI
+import com.example.core_api.WebService
 import com.example.domain.Film
 import com.example.pet_moviefinder.databinding.FilmItemBinding
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class FilmListAdapter(
     private val filmItemClickListener: ((film: Film) -> Unit)?,
-    private val requestPositionListener: ((recyclerPosition: Int) -> Unit)? = null
+    private val requestPositionListener: ((recyclerPosition: Int) -> Unit)? = null,
+    private val webService: WebService
 ) :
     RecyclerView.Adapter<FilmListAdapter.FilmViewHolder>() {
 
@@ -56,10 +58,12 @@ class FilmListAdapter(
         private fun bind(film: Film) {
             binding.title.text = film.title
             binding.description.text = film.description
-            Glide.with(binding.root.context)
-                .load(ConstForRestAPI.IMAGES_URL + "w342" + film.iconUrl)
-                .centerCrop()
-                .into(binding.actionImage)
+            webService.loadFilmIconFromWeb(film)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    binding.actionImage.setImageBitmap(it)
+                }, {})
             binding.rating.rating = (film.rating?.toFloat() ?: 0f) * 10
         }
     }

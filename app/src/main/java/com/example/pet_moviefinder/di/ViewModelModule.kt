@@ -1,6 +1,7 @@
 package com.example.pet_moviefinder.di
 
 import com.example.core_api.DataService
+import com.example.core_api.WebService
 import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.repository.FavoriteFilmsRepositoryImpl
 import com.example.pet_moviefinder.repository.FilmsRepositoryImpl
@@ -35,9 +36,10 @@ class ViewModelModule {
     @Provides
     fun provideDetailsFragmentModel(
         dataService: DataService,
+        webService: WebService,
         navigation: Navigation
     ): DetailsFragmentModel =
-        DetailsFragmentModel(dataService, navigation)
+        DetailsFragmentModel(dataService, webService, navigation)
 
     @Provides
     @Singleton

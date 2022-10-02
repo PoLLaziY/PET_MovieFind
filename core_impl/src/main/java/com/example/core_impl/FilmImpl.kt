@@ -1,5 +1,7 @@
 package com.example.core_impl
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -28,6 +30,34 @@ class FilmImpl(
 
     override fun toString(): String {
         return "${if (isFavorite) "Favorite " else ""}Film ${this.title}, ${this.rating}, ${this.id}, ${this.iconUrl}"
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(title)
+        parcel.writeString(description)
+        parcel.writeString(iconUrl)
+        parcel.writeValue(rating)
+        parcel.writeByte(if (isFavorite) 1 else 0)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<FilmImpl> {
+        override fun createFromParcel(parcel: Parcel): FilmImpl {
+            return FilmImpl(parcel.readInt(),
+                parcel.readString()?: "ParcelError",
+                parcel.readString()?: "ParcelError",
+                parcel.readString(),
+                parcel.readValue(Double::class.java.classLoader) as? Double,
+                parcel.readByte() != 0.toByte())
+        }
+
+        override fun newArray(size: Int): Array<FilmImpl?> {
+            return arrayOfNulls(size)
+        }
     }
 }
 

@@ -1,6 +1,8 @@
 package com.example.core_impl.web
 
 import android.content.Context
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.example.core_api.NetworkStateListener
 import com.example.core_api.WebService
 import com.example.core_impl.web.retrofit.RetrofitAPI
@@ -20,13 +22,17 @@ class WebModule {
 
     @Provides
     @Singleton
-    fun provideNetworkStateListener(context: Context): NetworkStateListener =
-        NetworkStateListenerImpl(context)
+    fun provideWebService(retrofitAPI: RetrofitAPI, networkStateListener: NetworkStateListener, requestManager: RequestManager): WebService =
+        RetrofitWebService(retrofitAPI, networkStateListener, requestManager)
 
     @Provides
     @Singleton
-    fun provideWebService(retrofitAPI: RetrofitAPI): WebService =
-        RetrofitWebService(retrofitAPI)
+    fun provideRequestManager(context: Context): RequestManager = Glide.with(context)
+
+    @Provides
+    @Singleton
+    fun provideNetworkStateListener(context: Context): NetworkStateListener =
+        NetworkStateListenerImpl(context)
 
     @Provides
     @Singleton

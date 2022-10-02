@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.example.domain.NetworkState
 import com.example.domain.WebResourceState
+import com.example.pet_moviefinder.App
 import com.example.pet_moviefinder.view_model.FilmListFragmentModel
 import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.R
@@ -25,7 +26,8 @@ class FilmListFragment(private val viewModel: FilmListFragmentModel) : Fragment(
 
     private val adapter: FilmListAdapter by lazy {
         FilmListAdapter(filmItemClickListener = { viewModel.onFilmItemClick(it) },
-            requestPositionListener = { viewModel.listPositionIs(it) })
+            requestPositionListener = { viewModel.listPositionIs(it) },
+        webService = App.app.appComponent.provideWebService())
     }
 
     override fun onResume() {

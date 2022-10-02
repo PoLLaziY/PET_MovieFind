@@ -2,13 +2,17 @@ package com.example.pet_moviefinder.repository
 
 import android.util.Log
 import com.example.core_api.DataService
+import com.example.core_api.WebService
 import com.example.domain.Film
+import com.example.domain.NetworkState
+import com.example.domain.WebResourceState
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class FavoriteFilmsRepositoryImpl(
-    dataService: DataService
+    dataService: DataService, webService: WebService
 ) : FilmsRepository {
 
     override val allFilmsList: BehaviorSubject<List<Film>> = BehaviorSubject.create()
@@ -17,6 +21,8 @@ class FavoriteFilmsRepositoryImpl(
     )
 
     override val loading: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(true)
+    override val networkState: Observable<NetworkState> = webService.networkState
+    override val webResourceState: Observable<WebResourceState> = webService.webResourceState
 
     private val _dataFilms = dataService.getFavoriteFilms().buffer(1).map {
         Log.i("SSS", "_dataFilms get Films")

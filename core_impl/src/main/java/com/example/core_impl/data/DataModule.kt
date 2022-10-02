@@ -1,5 +1,6 @@
 package com.example.core_impl.data
 
+import android.content.ContentResolver
 import android.content.Context
 import androidx.room.Room
 import com.example.core_api.DataService
@@ -17,8 +18,13 @@ class DataModule {
     @Singleton
     fun provideDataService(
         filmDao: FilmDao,
-        sharedPreferencesHelper: SharedPreferencesHelper
-    ): DataService = RoomSharedPrefsDataService(filmDao, sharedPreferencesHelper)
+        sharedPreferencesHelper: SharedPreferencesHelper,
+        contentResolver: ContentResolver
+    ): DataService = RoomSharedPrefsDataService(filmDao, sharedPreferencesHelper, contentResolver)
+
+    @Provides
+    @Singleton
+    fun provideContentResolver(context: Context): ContentResolver = context.contentResolver
 
     @Provides
     @Singleton

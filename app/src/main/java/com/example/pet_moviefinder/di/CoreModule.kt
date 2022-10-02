@@ -23,18 +23,8 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideNavigation(navigationRepository: NavigationRepository): Navigation =
-        NavigationImpl(navigationRepository)
-
-
-    @Provides
-    @Singleton
-    fun provideNavigationRepository(
-        networkStateListener: NetworkStateListener,
-        webResourceStateListener: WebResourceStateListener
-    ): NavigationRepository =
-        NavigationRepositoryImpl(networkStateListener, webResourceStateListener)
-
+    fun provideNavigation(): Navigation =
+        NavigationImpl()
 
     @Provides
     @Singleton
@@ -68,7 +58,7 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideFavoriteFilmsRepository(dataService: DataService): FavoriteFilmsRepositoryImpl =
-        FavoriteFilmsRepositoryImpl(dataService)
+    fun provideFavoriteFilmsRepository(dataService: DataService, webService: WebService): FavoriteFilmsRepositoryImpl =
+        FavoriteFilmsRepositoryImpl(dataService, webService)
 
 }

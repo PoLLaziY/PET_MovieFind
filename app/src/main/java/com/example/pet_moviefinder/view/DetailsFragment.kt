@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.example.domain.ConstForRestAPI
 import com.example.pet_moviefinder.view_model.DetailsFragmentModel
 import com.example.pet_moviefinder.R
+import com.example.pet_moviefinder.utils.pickAbsoluteTime
 import com.example.pet_moviefinder.databinding.FragmentDetailsBinding
+import com.example.pet_moviefinder.utils.createAlarmToWatchLater
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -27,10 +27,9 @@ class DetailsFragment(private val viewModel: DetailsFragmentModel) : Fragment() 
         super.onViewCreated(view, savedInstanceState)
         binding.detailsTitle.text = viewModel.film?.title
         binding.detailsDescription.text = viewModel.film?.description
-        Glide.with(binding.root.context)
-            .load(ConstForRestAPI.IMAGES_URL + "w500" + viewModel.film?.iconUrl)
-            .centerCrop()
-            .into(binding.detailsPoster)
+        viewModel.setFilmIcon(viewModel.film, binding.detailsPoster)
+        if (viewModel.film?.isFavorite == true) binding.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_24)
+        else binding.favoriteFab.setImageResource(R.drawable.ic_baseline_favorite_border_24)
 
         //слушатели для кнопок
         binding.favoriteFab.setOnClickListener {
@@ -43,6 +42,15 @@ class DetailsFragment(private val viewModel: DetailsFragmentModel) : Fragment() 
 
         binding.download.setOnClickListener {
             viewModel.onDownloadImageClick()
+        }
+
+        binding.alarmFab.setOnClickListener {
+            if (viewModel.film == null) return@setOnClickListener
+            Log.i("VVV", "Click on alarm")
+            requireContext().pickAbsoluteTime().subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    requireContext().createAlarmToWatchLater(viewModel.film!!, it)
+                }, {})
         }
     }
 

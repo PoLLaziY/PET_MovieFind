@@ -6,7 +6,9 @@ import com.example.core_api.WebService
 import com.example.domain.Film
 import com.example.domain.FilmsCategory
 import com.example.domain.Language
+import com.example.domain.NetworkState
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
@@ -26,6 +28,8 @@ class FilmsRepositoryImpl(
         BehaviorSubject.createDefault(emptyList())
     override val loading: BehaviorSubject<Boolean> =
         BehaviorSubject.createDefault(false)
+    override val webResourceState = webService.webResourceState
+    override val networkState: Observable<NetworkState> = webService.networkState
 
     private var lastSearchResultFromWeb: Boolean = true
     private var isLastSearchedPage: Boolean = false

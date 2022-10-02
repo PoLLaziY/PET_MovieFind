@@ -40,4 +40,5 @@
     <string name="app_bar_settings_icon_text">SETTINGS</string>
     <string name="web_service_state">WebServiceState</string>
     <string name="network_state">NetworkState</string>
+    <string name="alarm_button_description">AlarmButtonDescription</string>
 </resources>

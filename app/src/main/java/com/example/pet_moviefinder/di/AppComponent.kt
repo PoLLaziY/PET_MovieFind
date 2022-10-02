@@ -3,6 +3,7 @@ package com.example.pet_moviefinder.di
 import android.content.Context
 import com.example.core_api.ContextProvider
 import com.example.core_api.DataService
+import com.example.core_api.WebService
 import com.example.domain.Film
 import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.repository.*
@@ -28,6 +29,7 @@ abstract class AppComponent : ContextProvider {
         }
     }
     abstract fun provideNavigation(): Navigation
+    abstract fun provideWebService(): WebService
 
     @Component.Factory
     interface Factory {

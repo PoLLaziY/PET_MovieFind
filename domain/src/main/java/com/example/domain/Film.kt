@@ -1,6 +1,8 @@
 package com.example.domain
 
-interface Film {
+import android.os.Parcelable
+
+interface Film: Parcelable {
     val id: Int
     val title: String
     val description: String

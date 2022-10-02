@@ -11,7 +11,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        minSdk 21
+        minSdk 23
         targetSdk 23
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -66,4 +66,8 @@ dependencies {
     implementation room
     implementation room_rx3_adapter
     kapt room_kapt
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    //implementation 'androidx.preference:preference:1.2.0'
 }

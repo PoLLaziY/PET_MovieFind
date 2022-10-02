@@ -35,39 +35,46 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/share_fab"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/cardMargin"
-        android:contentDescription="@string/shared_button_description"
-        app:backgroundTint="@color/button_color"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|right"
-        app:srcCompat="@drawable/ic_baseline_share_24" />
+        app:layout_anchorGravity="bottom|center">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/download"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/cardMargin"
-        android:contentDescription="@string/shared_button_description"
-        app:backgroundTint="@color/button_color"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|center"
-        app:srcCompat="@drawable/ic_baseline_download_24" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/favorite_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cardMargin"
+            app:backgroundTint="@color/button_color"
+            app:srcCompat="@drawable/ic_baseline_favorite_24" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/favorite_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/cardMargin"
-        android:contentDescription="@string/like_bottom_description"
-        app:backgroundTint="@color/button_color"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|left"
-        app:srcCompat="@drawable/ic_baseline_favorite_24" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/share_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cardMargin"
+            app:backgroundTint="@color/button_color"
+            app:srcCompat="@drawable/ic_baseline_share_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cardMargin"
+            app:backgroundTint="@color/button_color"
+            app:srcCompat="@drawable/ic_baseline_download_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/alarm_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/cardMargin"
+            app:backgroundTint="@color/button_color"
+            app:srcCompat="@drawable/ic_baseline_watch_later_24" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

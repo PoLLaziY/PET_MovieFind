@@ -32,12 +32,12 @@ class FilmListFragmentModel(
     val filmList: BehaviorSubject<List<Film>> = BehaviorSubject.create()
     val isRefreshing: Observable<Boolean> = repository.loading.subscribeOn(Schedulers.io())
     val networkState: Observable<NetworkState> =
-        navigation.networkState.subscribeOn(Schedulers.io()).apply {
+        repository.networkState.subscribeOn(Schedulers.io()).apply {
             observeOn(Schedulers.io())
                 .subscribe { lastNetworkState = it }
         }
     val webResState: Observable<WebResourceState> =
-        navigation.webResourceState.subscribeOn(Schedulers.io()).apply {
+        repository.webResourceState.subscribeOn(Schedulers.io()).apply {
             observeOn(Schedulers.io())
                 .subscribe { lastWebResourceState = it }
         }

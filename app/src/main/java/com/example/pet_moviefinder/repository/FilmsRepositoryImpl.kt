@@ -38,6 +38,10 @@ class FilmsRepositoryImpl(
 
     private val dataProcess: CompositeDisposable = CompositeDisposable()
 
+    init {
+        getFilmsFromWeb(1)
+    }
+
     private var searchProcess: Disposable? = null
         set(value) {
             field = value
@@ -173,7 +177,11 @@ class FilmsRepositoryImpl(
     }
 
     private fun getFilmsFromWeb(page: Int): Single<out List<Film>> =
-        webService.getFilms(page, settingsRepository.filmsCategory.value?: FilmsCategory.POPULAR, Language.RUS).subscribeOn(Schedulers.io())
+        webService.getFilms(
+            page,
+            settingsRepository.filmsCategory.value ?: FilmsCategory.POPULAR,
+            Language.RUS
+        ).subscribeOn(Schedulers.io())
 
     private fun searchFilmsFromWeb(query: String, page: Int): Single<out List<Film>> =
         webService.searchFilms(query, page, Language.RUS).subscribeOn(Schedulers.io())

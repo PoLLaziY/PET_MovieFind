@@ -33,20 +33,11 @@ import kotlin.math.abs
 class NavigationImpl() : Navigation {
 
     private var activity: MainActivity? = null
-        set(value) {
-            field = value
-            if (value != null) {
-                if (activeFragment == null) onNavigationClick(R.id.home)
-            }
-        }
 
     private val fragmentManager: FragmentManager?
-        get() {
-            return activity?.supportFragmentManager
-        }
+        get() = activity?.supportFragmentManager
 
     private var activeFragment: Fragment? = null
-
 
     private val homeFragment: FilmListFragment by lazy {
         FilmListFragment(
@@ -94,17 +85,13 @@ class NavigationImpl() : Navigation {
                 R.id.selections -> SelectionsFragment()
                 R.id.settings -> settingsFragment
                 else -> null
-            }
+            }, addToBackstack = true
         )
         return true
     }
 
     override fun onFilmItemClick(film: Film): Boolean {
-        if (fragmentManager != null) fragmentManager!!.beginTransaction()
-            .add(
-                R.id.fragment_root,
-                DetailsFragment(App.app.appComponent.provideDetails(film))
-            ).addToBackStack(null).commit()
+        setFragment(DetailsFragment(App.app.appComponent.provideDetails(film)))
         return true
     }
 
@@ -164,5 +151,14 @@ class NavigationImpl() : Navigation {
 
     override fun createAlarmToWatchLater(film: Film, absoluteTime: Long) {
         activity?.createAlarmToWatchLater(film, absoluteTime)
+    }
+
+    override fun closePosterFragment() {
+        if (activeFragment is PosterFragment) fragmentManager?.popBackStack()
+    }
+
+    override fun showPosterFragment(url: String) {
+        val fragment = PosterFragment(url, App.app.appComponent.provideWebService(), this)
+        setFragment(fragment)
     }
 }

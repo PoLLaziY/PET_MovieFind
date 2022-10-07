@@ -3,8 +3,6 @@ package com.example.core_impl.web
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.Log
-import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -14,8 +12,6 @@ import com.example.core_impl.web.retrofit.RetrofitAPI
 import com.example.domain.*
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import java.net.URI
-import java.net.URL
 
 class RetrofitWebService(
     private val retrofitService: RetrofitAPI,
@@ -70,14 +66,18 @@ class RetrofitWebService(
     }
 
     override fun loadFilmIconFromWeb(film: Film?, quality: IconQuality): Single<Bitmap> {
+        return loadImageFromWeb(film?.iconURL(IconQuality.ICON_QUALITY_MEDIUM))
+    }
+
+    override fun loadImageFromWeb(url: String?): Single<Bitmap> {
         return Single.create { single ->
-            if (film?.iconUrl == null) {
+            if (url == null) {
                 single.onError(Exception("Glide <- Film == null"))
                 return@create
             }
             requestManager
                 .asBitmap()
-                .load(film.iconURI(quality))
+                .load(url)
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         single.onSuccess(resource)
@@ -92,21 +92,9 @@ class RetrofitWebService(
         }
     }
 
-    override fun ImageView.setFilmIconFromWeb(
-        film: Film?,
-        iconQuality: IconQuality
-    ) {
-        if (film?.iconUrl == null) return
-        Glide.with(this)
-            .load(film.iconURI(iconQuality))
-            .centerCrop()
-            .into(this)
-    }
-
-
-    private fun Film.iconURI(iconQuality: IconQuality): URI? {
+    private fun Film.iconURL(iconQuality: IconQuality): String? {
         if (this.iconUrl == null) return null
-        return URL(ConstForRestAPI.IMAGES_URL + iconQuality + this.iconUrl).toURI()
+        return ConstForRestAPI.IMAGES_URL + iconQuality + this.iconUrl
     }
 
 }

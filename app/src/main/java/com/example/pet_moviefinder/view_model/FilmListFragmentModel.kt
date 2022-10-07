@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 class FilmListFragmentModel(
     private val repository: FilmsRepository,
     private val navigation: Navigation,
-) : ViewModel(), FavoriteListModel {
+) : ViewModel(), FavoriteListModel, FilmsWithAlarmModel{
 
     //In
     val queryFromSearch: BehaviorSubject<String> = BehaviorSubject.createDefault("")

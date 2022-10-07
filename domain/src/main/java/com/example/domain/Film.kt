@@ -9,4 +9,5 @@ interface Film: Parcelable {
     val iconUrl: String?
     val rating: Double?
     var isFavorite: Boolean
+    var alarmTime: Long?
 }

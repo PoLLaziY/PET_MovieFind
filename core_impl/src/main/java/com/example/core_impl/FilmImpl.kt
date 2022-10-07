@@ -15,7 +15,8 @@ class FilmImpl(
     @ColumnInfo(name = Fields.DESCRIPTION) @SerializedName(Fields.DESCRIPTION) override val description: String,
     @ColumnInfo(name = Fields.ICON_URL) @SerializedName(Fields.ICON_URL) override val iconUrl: String?,
     @ColumnInfo(name = Fields.RATING) @SerializedName(Fields.RATING) override val rating: Double?,
-    @ColumnInfo(name = Fields.IS_FAVORITE) override var isFavorite: Boolean = false
+    @ColumnInfo(name = Fields.IS_FAVORITE) override var isFavorite: Boolean = false,
+    @ColumnInfo(name = Fields.ALARM_TIME) override var alarmTime: Long? = 0
 ) : Film {
     object Fields {
         const val DB_NAME = "film_db"
@@ -26,6 +27,7 @@ class FilmImpl(
         const val DESCRIPTION = "overview"
         const val RATING = "vote_average"
         const val IS_FAVORITE = "is_favorite"
+        const val ALARM_TIME = "to_later_watch_alarm_time"
     }
 
     override fun toString(): String {
@@ -39,6 +41,7 @@ class FilmImpl(
         parcel.writeString(iconUrl)
         parcel.writeValue(rating)
         parcel.writeByte(if (isFavorite) 1 else 0)
+        parcel.writeLong(alarmTime?: 0)
     }
 
     override fun describeContents(): Int {
@@ -52,7 +55,8 @@ class FilmImpl(
                 parcel.readString()?: "ParcelError",
                 parcel.readString(),
                 parcel.readValue(Double::class.java.classLoader) as? Double,
-                parcel.readByte() != 0.toByte())
+                parcel.readByte() != 0.toByte(),
+                parcel.readLong())
         }
 
         override fun newArray(size: Int): Array<FilmImpl?> {
@@ -69,6 +73,7 @@ fun Film.toFilmImpl(): FilmImpl {
         this.description,
         this.iconUrl,
         this.rating,
-        this.isFavorite
+        this.isFavorite,
+        this.alarmTime
     )
 }

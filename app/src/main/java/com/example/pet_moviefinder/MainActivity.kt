@@ -2,6 +2,8 @@ package com.example.pet_moviefinder
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import com.example.domain.Film
 import com.example.pet_moviefinder.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -14,5 +16,9 @@ class MainActivity : AppCompatActivity() {
 
         val nav = App.app.appComponent.provideNavigation()
         nav.subscribe(this)
+        val film = intent.getParcelableExtra("film") as Film?
+        if (film != null) {
+            nav.onFilmItemClick(film)
+        }
     }
 }

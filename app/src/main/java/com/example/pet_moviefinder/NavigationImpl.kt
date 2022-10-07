@@ -25,8 +25,10 @@ import com.example.pet_moviefinder.view_model.FilmListFragmentModel
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.lang.Exception
+import kotlin.math.abs
 
 class NavigationImpl() : Navigation {
 
@@ -58,6 +60,12 @@ class NavigationImpl() : Navigation {
         )
     }
 
+    private val alarmFragment: FilmListFragment by lazy {
+        FilmListFragment(
+            App.app.appComponent.provideFilmsWithAlarmModel() as FilmListFragmentModel
+        )
+    }
+
     private val settingsFragment: SettingsFragment by lazy {
         SettingsFragment(
             App.app.appComponent.provideSettingsModel()
@@ -82,7 +90,7 @@ class NavigationImpl() : Navigation {
             when (itemId) {
                 R.id.home -> homeFragment
                 R.id.favorite -> favoriteFragment
-                R.id.later -> LaterFragment()
+                R.id.later -> alarmFragment
                 R.id.selections -> SelectionsFragment()
                 R.id.settings -> settingsFragment
                 else -> null
@@ -148,5 +156,13 @@ class NavigationImpl() : Navigation {
         )
 
         Log.i("VVV", "Request end")
+    }
+
+    override fun pickAbsoluteTime(): Single<Long> {
+        return activity?.pickAbsoluteTime()?: Single.error(Exception("Navigation Activity equals Null"))
+    }
+
+    override fun createAlarmToWatchLater(film: Film, absoluteTime: Long) {
+        activity?.createAlarmToWatchLater(film, absoluteTime)
     }
 }

@@ -61,4 +61,9 @@ class CoreModule {
     fun provideFavoriteFilmsRepository(dataService: DataService, webService: WebService): FavoriteFilmsRepositoryImpl =
         FavoriteFilmsRepositoryImpl(dataService, webService)
 
+    @Provides
+    @Singleton
+    fun provideFilmsWithAlarmRepository(dataService: DataService, webService: WebService): FilmsWithAlarmRepository =
+        FilmsWithAlarmRepository(dataService, webService)
+
 }

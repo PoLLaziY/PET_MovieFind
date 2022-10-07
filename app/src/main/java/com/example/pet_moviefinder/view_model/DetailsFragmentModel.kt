@@ -91,4 +91,19 @@ class DetailsFragmentModel(
                 detailsPoster.setImageBitmap(it)
             }, {})
     }
+
+    fun onAlarmButtonClick() {
+        if (film == null) return
+        val film = film!!
+
+        navigation.pickAbsoluteTime().subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                navigation.createAlarmToWatchLater(film, it)
+                film.alarmTime = it
+                data.insertFilm(film).subscribeOn(Schedulers.io())
+                    .subscribe {
+                        Log.i("VVV", "$film")
+                    }
+            }, {})
+    }
 }

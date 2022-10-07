@@ -5,17 +5,22 @@ import com.example.core_api.WebService
 import com.example.pet_moviefinder.Navigation
 import com.example.pet_moviefinder.repository.FavoriteFilmsRepositoryImpl
 import com.example.pet_moviefinder.repository.FilmsRepositoryImpl
+import com.example.pet_moviefinder.repository.FilmsWithAlarmRepository
 import com.example.pet_moviefinder.repository.SettingsRepository
-import com.example.pet_moviefinder.view_model.DetailsFragmentModel
-import com.example.pet_moviefinder.view_model.FavoriteListModel
-import com.example.pet_moviefinder.view_model.FilmListFragmentModel
-import com.example.pet_moviefinder.view_model.SettingsFragmentModel
+import com.example.pet_moviefinder.view_model.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
 class ViewModelModule {
+
+    @Provides
+    @Singleton
+    fun provideFilmsWithAlarmModel(
+        repository: FilmsWithAlarmRepository,
+        navigation: Navigation
+    ): FilmsWithAlarmModel = FilmListFragmentModel(repository, navigation)
 
     @Provides
     @Singleton

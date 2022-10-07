@@ -2,7 +2,6 @@ package com.example.core_impl.data
 
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.provider.MediaStore
@@ -30,21 +29,25 @@ class RoomSharedPrefsDataService(
         return roomDao.getFavoriteFilms()
     }
 
-    override fun insertFilms(films: List<Film>) {
-        roomDao.insertFilms(films.map {
+    override fun getFilmsWithAlarm(): Observable<out List<Film>> {
+        return roomDao.getFilmsWithAlarm()
+    }
+
+    override fun insertFilms(films: List<Film>): Completable {
+        return roomDao.insertFilms(films.map {
             it.toFilmImpl() })
     }
 
-    override fun deleteFilm(film: Film) {
-        roomDao.deleteFilm(film.toFilmImpl())
+    override fun deleteFilm(film: Film): Completable {
+        return roomDao.deleteFilm(film.toFilmImpl())
     }
 
-    override fun clearAllFilms() {
-        roomDao.clear()
+    override fun clearAllFilms(): Completable {
+        return roomDao.clear()
     }
 
-    override fun clearNotFavoriteFilms() {
-        roomDao.clearNotFavorite()
+    override fun clearNotFavoriteFilms(): Completable {
+        return roomDao.clearNotMarked()
     }
 
     override fun getFilmsCategory(): Single<FilmsCategory> {
@@ -60,9 +63,9 @@ class RoomSharedPrefsDataService(
         }
     }
 
-    override fun insertFilm(film: Film) {
+    override fun insertFilm(film: Film): Completable {
         Log.i("SSS", "${film.title} insert to Db")
-        roomDao.insertFilm(film.toFilmImpl())
+        return roomDao.insertFilm(film.toFilmImpl())
     }
 
     override fun loadToGalleryImage(bitmap: Bitmap, film: Film): Completable {

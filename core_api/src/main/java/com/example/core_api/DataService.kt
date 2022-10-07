@@ -12,19 +12,21 @@ interface DataService {
 
     fun getFavoriteFilms(): Observable<out List<Film>>
 
-    fun insertFilms(films: List<Film>)
+    fun getFilmsWithAlarm(): Observable<out List<Film>>
 
-    fun deleteFilm(film: Film)
+    fun insertFilms(films: List<Film>): Completable
 
-    fun clearAllFilms()
+    fun deleteFilm(film: Film): Completable
 
-    fun clearNotFavoriteFilms()
+    fun clearAllFilms(): Completable
+
+    fun clearNotFavoriteFilms(): Completable
 
     fun getFilmsCategory(): Single<FilmsCategory>
 
     fun saveFilmsCategory(category: FilmsCategory): Single<FilmsCategory>
 
-    fun insertFilm(film: Film)
+    fun insertFilm(film: Film): Completable
 
     fun loadToGalleryImage(bitmap: Bitmap, film: Film): Completable
 }

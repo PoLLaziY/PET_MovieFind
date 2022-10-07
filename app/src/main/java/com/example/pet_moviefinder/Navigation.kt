@@ -1,6 +1,7 @@
 package com.example.pet_moviefinder
 
 import com.example.domain.Film
+import io.reactivex.rxjava3.core.Single
 
 interface Navigation {
     fun onNavigationClick(itemId: Int): Boolean
@@ -11,4 +12,6 @@ interface Navigation {
     fun makeSnackBarToGallery()
     fun checkPermission(): Boolean
     fun requestPermission()
+    fun pickAbsoluteTime(): Single<Long>
+    fun createAlarmToWatchLater(film: Film, absoluteTime: Long)
 }

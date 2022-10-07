@@ -45,12 +45,7 @@ class DetailsFragment(private val viewModel: DetailsFragmentModel) : Fragment() 
         }
 
         binding.alarmFab.setOnClickListener {
-            if (viewModel.film == null) return@setOnClickListener
-            Log.i("VVV", "Click on alarm")
-            requireContext().pickAbsoluteTime().subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    requireContext().createAlarmToWatchLater(viewModel.film!!, it)
-                }, {})
+            viewModel.onAlarmButtonClick()
         }
     }
 
